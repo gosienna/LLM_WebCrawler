@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Extracted HTML Viewer</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #ddd;
+    }
+    .timestamp {
+      color: #666;
+      font-style: italic;
+    }
+    .pattern-section {
+      margin-bottom: 20px;
+      padding: 15px;
+      background-color: #f5f5f5;
+      border-radius: 4px;
+    }
+    .pattern-input {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .pattern-input input {
+      flex: 1;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    .pattern-input input:focus {
+      outline: none;
+      border-color: #4a90e2;
+      box-shadow: 0 0 3px rgba(74, 144, 226, 0.3);
+    }
+    .pattern-input button {
+      padding: 8px 16px;
+      background-color: #4a90e2;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background-color 0.2s;
+    }
+    .pattern-input button:hover {
+      background-color: #357abd;
+    }
+    .pattern-input button:active {
+      background-color: #2a5f94;
+    }
+    .matched-elements {
+      margin-top: 20px;
+    }
+    .element-item {
+      background-color: #fff;
+      padding: 15px;
+      margin-bottom: 10px;
+      border-radius: 4px;
+      border: 1px solid #ddd;
+    }
+    pre {
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      background-color: #f5f5f5;
+      padding: 15px;
+      border-radius: 4px;
+      border: 1px solid #ddd;
+      font-family: monospace;
+      font-size: 14px;
+      line-height: 1.5;
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Extracted Content</h1>
+    <div class="timestamp" id="timestamp"></div>
+  </div>
+
+  <div class="pattern-section">
+    <div class="pattern-input">
+      <input type="text" id="domPattern" placeholder="Enter CSS selector (e.g., div.class-name, #id-name)">
+      <button id="extractPattern">Extract Pattern</button>
+    </div>
+    <div id="matchedElements" class="matched-elements"></div>
+  </div>
+
+  <div class="content-section">
+    <h2>Full HTML Content</h2>
+    <pre id="content"></pre>
+  </div>
+
+  <script src="viewer.js"></script>
+</body>
+</html> 
