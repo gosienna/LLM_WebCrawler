@@ -31,7 +31,7 @@
     }
   ],
   "web_accessible_resources": [{
-    "resources": ["popup/viewer.html", "popup/viewer.js"],
+    "resources": ["popup/viewer-standalone.html", "popup/viewer-standalone.js", "popup/viewer-standalone.css"],
     "matches": ["<all_urls>"]
   }],
   "icons": {

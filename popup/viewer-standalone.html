@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Extracted HTML Viewer</title>
+  <style></style>
+</head>
+<script src="load-data.js"></script>
+<script src="viewer-standalone.js"></script>
+<body>
+  <div class="header">
+    <h1>Extracted Content (No CSP)</h1>
+  </div>
+
+  <div class="info-box">
+    <strong>✅ No CSP Restrictions!</strong> This external viewer allows full JavaScript execution including <code>eval()</code> and <code>new Function()</code> for custom display functions.
+  </div>
+
+  <div class="main-flex-container">
+    <div class="left-panel">
+      <div class="content-section">
+        <div class="content-header" style="cursor: pointer;">
+          <h2>Full HTML Content</h2>
+          <span class="toggle-icon">-</span>
+        </div>
+        <div class="content-body">
+          <pre id="content"></pre>
+        </div>
+        <div id="matchedElements" class="matched-elements"></div>
+      </div>
+    </div>
+    
+    <div class="right-panel">
+      <div class="pattern-input">
+        <input type="text" id="domPattern" placeholder="Enter CSS selector (e.g., div.class-name, #id-name)">
+        <button id="extractPattern">Extract Pattern</button>
+      </div>
+      
+      <div class="pattern-section">
+        <div style="margin-top: 10px;">
+          <label for="customDisplayInput"><strong>Custom Display Function (JS):</strong></label>
+          <textarea id="customDisplayInput" rows="6" placeholder="(elements, container, data) => {&#10;  // Your code here - data contains rootUrl and other info&#10;}">container.innerHTML = '';
+elements.forEach(element => {
+  const elementItem = document.createElement('div');
+  elementItem.className = 'element-item';
+  
+  if (element.tagName.toLowerCase() === 'link') {
+    elementItem.textContent = element.outerHTML;
+  } else if (element.tagName.toLowerCase() === 'a') {
+    let href = element.getAttribute('href');
+    const text = element.textContent.trim();
+    
+    if (href && !href.startsWith('http') && !href.startsWith('//')) {
+      try {
+        const rootUrl = data.rootUrl ? new URL(data.rootUrl).origin : '';
+        if (rootUrl) {
+          href = new URL(href, rootUrl).href;
+        }
+      } catch (error) {
+        console.error('Error processing URL:', error);
+      }
+    }
+    console.log('data', data);
+    elementItem.textContent = text;
+    elementItem.title = href;
+    
+    elementItem.addEventListener('click', async () => {
+      if (href) {
+        try {
+          // Construct full URL using rootUrl if available
+          let fullUrl = href;
+          if (!href.startsWith('http') && !href.startsWith('//')) {
+            try {
+              const rootUrl = data.rootUrl ? new URL(data.rootUrl).origin : '';
+              if (rootUrl) {
+                fullUrl = new URL(href, rootUrl).href;
+              }
+            } catch (error) {
+              console.error('Error processing URL:', error);
+            }
+          }
+          const downloadLink = document.createElement('a');
+          downloadLink.href = fullUrl;
+          const urlParts = fullUrl.split('/');
+          let filename = urlParts[urlParts.length - 1] || 'download';
+          const title = element.getAttribute('title');
+          const textContent = element.textContent.trim();
+          
+          if (title && title.includes('.')) {
+            filename = title;
+          } else if (textContent && textContent.includes('.')) {
+            filename = textContent;
+          } else if (title) {
+            const urlExtension = filename.split('.').pop();
+            if (urlExtension && urlExtension.length <= 5) {
+              filename = title + '.' + urlExtension;
+            } else {
+              filename = textContent;
+            }
+          } else if (textContent) {
+            const urlExtension = filename.split('.').pop();
+            if (urlExtension && urlExtension.length <= 5) {
+              filename = textContent + '.' + urlExtension;
+            } else {
+              filename = textContent;
+            }
+          }
+          filename = filename.replace(/[<>:"/\\|?*]/g, '_');
+          downloadLink.download = filename;
+          document.body.appendChild(downloadLink);
+          downloadLink.target = '_blank';
+          downloadLink.click();
+          document.body.removeChild(downloadLink);
+          console.log('Download initiated for:', fullUrl);
+        } catch (error) {
+          console.error('Download failed:', error);
+          window.open(href, '_blank');
+        }
+      }
+    });
+  } else {
+    elementItem.textContent = element.textContent.trim();
+  }
+  container.appendChild(elementItem);
+});</textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const contentHeader = document.querySelector('.content-header');
+    const contentBody = document.querySelector('.content-body');
+    const toggleIcon = contentHeader.querySelector('.toggle-icon');
+    if (contentHeader && contentBody && toggleIcon) {
+      contentHeader.addEventListener('click', function() {
+        if (contentBody.style.display === 'none') {
+          contentBody.style.display = '';
+          toggleIcon.textContent = '-';
+        } else {
+          contentBody.style.display = 'none';
+          toggleIcon.textContent = '+';
+        }
+      });
+    }
+  });
+  </script>
+</body>
+</html> 

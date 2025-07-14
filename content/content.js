@@ -7,9 +7,9 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 });
 
 function extractHTML(sendResponse) {
-  let result = {
+  data = {
     html: document.documentElement.outerHTML,
-  };
+  }
   // Send the response back to the popup
-  sendResponse(result);
+  sendResponse(data);
 }
